@@ -1,8 +1,47 @@
+import { useState } from "react";
+import ColorPicker from "./ColorPicker";
+import TextInput from "./TextInput";
+
 const BookmarkForm = () => {
+  const [formData, setFormData] = useState({
+    id: crypto.randomUUID(),
+    url: "",
+    color: "#ffffff",
+    category: "",
+    userName: "",
+    password: "",
+  });
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    const newData = { ...formData };
+
+    newData[name] = value;
+    setFormData(newData);
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+  };
+
+  const handleFormClear = () => {
+    setFormData({
+      id: crypto.randomUUID(),
+      url: "",
+      color: "#ffffff",
+      category: "",
+      userName: "",
+      password: "",
+    });
+  };
+
   return (
     <>
       <div className="max-w-7xl mx-auto mt-8 px-4">
-        <form className="mb-10 rounded-2xl border border-neutral-800 bg-linear-to-br from-neutral-900/70 to-neutral-800/40 p-8 shadow-2xl shadow-black/40 backdrop-blur">
+        <form
+          className="mb-10 rounded-2xl border border-neutral-800 bg-linear-to-br from-neutral-900/70 to-neutral-800/40 p-8 shadow-2xl shadow-black/40 backdrop-blur"
+          onSubmit={handleSubmit}
+        >
           <div className="mb-8 flex flex-col gap-3">
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-400">
               New bookmark
@@ -18,49 +57,31 @@ const BookmarkForm = () => {
 
           <div className="space-y-6">
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-              <label className="flex flex-col gap-3 rounded-2xl border border-neutral-800 bg-neutral-900/60 p-5 text-sm transition focus-within:border-blue-500 focus-within:bg-neutral-900 focus-within:shadow-lg focus-within:shadow-blue-500/10">
-                <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
-                  Website URL
-                </span>
-                <input
-                  type="url"
-                  placeholder="https://example.com"
-                  className="w-full bg-transparent text-base text-white placeholder:text-neutral-500 focus:outline-none"
-                />
-                <span className="text-xs text-neutral-500">
-                  Include https:// for best results.
-                </span>
-              </label>
+              <TextInput
+                label={"Website URL"}
+                type={"url"}
+                name={"url"}
+                placeholder={"https://example.com"}
+                helper={"Include https:// for best results."}
+                value={formData.url}
+                onChange={handleChange}
+              />
 
-              <div className="rounded-2xl border border-neutral-800 bg-neutral-900/60 p-5 text-sm transition focus-within:border-blue-500 focus-within:bg-neutral-900 focus-within:shadow-lg focus-within:shadow-blue-500/10">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
-                      Favicon color
-                    </p>
-                    <p className="text-xs text-neutral-500">
-                      Select the accent color we should render.
-                    </p>
-                  </div>
-                  <input
-                    type="color"
-                    value="#3b82f6"
-                    className="h-12 w-12 cursor-pointer rounded-full border border-neutral-700 bg-neutral-800 p-1 shadow-inner shadow-black/50"
-                  />
-                </div>
-                <div className="mt-5 flex items-center gap-3 text-xs text-neutral-500">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-neutral-700 bg-neutral-800/80 text-[10px] font-semibold uppercase text-neutral-400">
-                    Hex
-                  </span>
-                  <span>Matches any brand primary color.</span>
-                </div>
-              </div>
+              <ColorPicker
+                onColorChange={handleChange}
+                name={"color"}
+                value={formData.color}
+              />
 
               <label className="flex flex-col gap-3 rounded-2xl border border-neutral-800 bg-neutral-900/60 p-5 text-sm transition focus-within:border-blue-500 focus-within:bg-neutral-900 focus-within:shadow-lg focus-within:shadow-blue-500/10">
                 <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
                   Category
                 </span>
-                <select className="w-full bg-transparent text-base text-white outline-none">
+                <select
+                  className="w-full bg-transparent text-base text-white outline-none"
+                  onChange={(e) => handleChange(e)}
+                  name="category"
+                >
                   <option className="bg-neutral-900 text-white">
                     Select category
                   </option>
@@ -88,33 +109,25 @@ const BookmarkForm = () => {
             </div>
 
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <label className="flex flex-col gap-3 rounded-2xl border border-neutral-800 bg-neutral-900/60 p-5 text-sm transition focus-within:border-blue-500 focus-within:bg-neutral-900 focus-within:shadow-lg focus-within:shadow-blue-500/10">
-                <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
-                  Username
-                </span>
-                <input
-                  type="text"
-                  placeholder="Enter username"
-                  className="w-full bg-transparent text-base text-white placeholder:text-neutral-500 focus:outline-none"
-                />
-                <span className="text-xs text-neutral-500">
-                  Use workspace or personal handle.
-                </span>
-              </label>
+              <TextInput
+                label={"Username"}
+                type={"text"}
+                name={"userName"}
+                placeholder={"Enter username"}
+                helper={"Use workspace or personal handle."}
+                value={formData.userName}
+                onChange={handleChange}
+              />
 
-              <label className="flex flex-col gap-3 rounded-2xl border border-neutral-800 bg-neutral-900/60 p-5 text-sm transition focus-within:border-blue-500 focus-within:bg-neutral-900 focus-within:shadow-lg focus-within:shadow-blue-500/10">
-                <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
-                  Password
-                </span>
-                <input
-                  type="password"
-                  placeholder="Enter password"
-                  className="w-full bg-transparent text-base text-white placeholder:text-neutral-500 focus:outline-none"
-                />
-                <span className="text-xs text-neutral-500">
-                  Choose at least 6 characters.
-                </span>
-              </label>
+              <TextInput
+                label={"Password"}
+                type={"password"}
+                name={"password"}
+                placeholder={"Enter password"}
+                helper={"Choose at least 6 characters."}
+                value={formData.password}
+                onChange={handleChange}
+              />
             </div>
           </div>
 
@@ -126,6 +139,7 @@ const BookmarkForm = () => {
               <button
                 type="reset"
                 className="w-full rounded-full border border-neutral-700 px-6 py-3 text-sm font-semibold text-neutral-200 transition hover:border-neutral-500 hover:text-white md:w-auto"
+                onClick={handleFormClear}
               >
                 Clear
               </button>
