@@ -1,7 +1,13 @@
+import BookmarkForm from "./bookmarkForm/BookmarkForm";
+import Footer from "./Footer";
+import Header from "./Header";
+
 const App = () => {
   return (
     <>
-      <div>App</div>
+      <Header />
+      <BookmarkForm />
+      <Footer />
     </>
   );
 };
